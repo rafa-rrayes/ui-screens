@@ -29,6 +29,7 @@ Screens are designed here first, reviewed in the gallery, then handed to whoever
 6. **Verify**: `uis check B4` (must be 0 errors), then `uis shot B4` and **look at `shots/B4.png`**.
    For a whole flow, `uis sheet B` and look at `shots/_sheet-B.png`.
 7. Repeat. When a group is done, run `uis check` for everything and `uis spec`.
+8. **Share** for review with `uis export` (or `uis export B` for one flow): one self-contained HTML file in `dist/`.
 
 ## Rules
 

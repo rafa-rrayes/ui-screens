@@ -1,9 +1,11 @@
 /* Gallery for screens/manifest.js. Loaded by the project's index.html.
    URL params: ?g=B (one group) · ?z=.5 (zoom) · ?print (no chrome, eager load — used by `uis sheet`)
-   Hash: #B4 opens the focus view for B4 (100%, notes, links in/out). Clicking a data-goto hotspot follows it. */
+   Hash: #B4 opens the focus view for B4 (100%, notes, links in/out). Clicking a data-goto hotspot follows it.
+   Embed mode: `uis export` sets window.UIS_EMBED = { exported, assets, screens } and frames load inlined documents. */
 (function () {
   const M = window.UIS || { groups: [] };
   const P = new URLSearchParams(location.search);
+  const EMBED = window.UIS_EMBED || null;
   const PRINT = P.has("print");
   const devices = Object.assign({ phone: { w: 402, h: 874 }, tablet: { w: 834, h: 1194 }, desktop: { w: 1280, h: 832 } }, M.devices || {});
   const groups = M.groups.filter((g) => !P.get("g") || P.get("g").split(",").includes(g.id));
@@ -21,6 +23,7 @@
   body{background:#E8E8E3;font-family:var(--font-ui)}
   .g-top{position:sticky;top:0;z-index:20;background:var(--ink-deep);color:var(--on-ink);padding:12px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   .g-top .name{font:700 18px/24px var(--font-display)}
+  .g-top .stamp{opacity:.6;font:500 12px/16px var(--font-ui)}
   .g-top nav{display:flex;gap:6px;flex-wrap:wrap}
   .g-top a,.g-top button{color:var(--on-ink);padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.08);font:600 13px/18px var(--font-ui)}
   .g-top .tools{margin-left:auto;display:flex;gap:6px}
@@ -40,7 +43,7 @@
   .g-notes{width:calc(var(--w) * var(--z));font:400 12px/17px var(--font-ui);color:var(--ink-muted)}
   .g-notes p,.g-notes li{margin-bottom:5px} .g-notes code{font-family:var(--font-mono);font-size:11px}
   body.hide-notes .g-notes{display:none}
-  .g-focus{position:fixed;inset:0;z-index:30;background:rgba(14,16,20,.82);display:none;gap:28px;padding:28px;overflow:auto}
+  .g-focus{position:fixed;inset:0;z-index:30;background:rgba(14,16,20,.94);display:none;gap:28px;padding:28px;overflow:auto}
   .g-focus.open{display:flex}
   .g-focus .stage{flex:none}
   .g-focus .stage iframe{border:0;border-radius:10px;background:var(--bg);display:block;box-shadow:0 20px 60px rgba(0,0,0,.4)}
@@ -57,7 +60,7 @@
   if (PRINT) document.body.classList.add("print");
 
   if (!PRINT) {
-    document.body.insertAdjacentHTML("beforeend", `<header class="g-top"><span class="name">${esc(M.name || "UI")}</span>
+    document.body.insertAdjacentHTML("beforeend", `<header class="g-top"><span class="name">${esc(M.name || "UI")}</span>${EMBED ? `<span class="stamp">exported ${esc(EMBED.exported)}</span>` : ""}
       <nav>${groups.map((g) => `<a href="#g-${g.id}">${g.id}</a>`).join("")}</nav>
       <div class="tools"><button data-z=".4">40%</button><button data-z=".6">60%</button><button data-z="1">100%</button>
       <button id="t-hot">Hotspots</button><button id="t-notes" class="on">Notes</button></div></header>`);
@@ -76,9 +79,10 @@
       b.className = "g-board"; b.id = "b-" + code;
       b.style.setProperty("--w", dev.w + "px"); b.style.setProperty("--h", dev.h + "px");
       b.innerHTML = `<span class="g-label"><b>${esc(code)}</b>${esc(title)}</span>
-        <div class="g-frame"><iframe ${PRINT ? "" : 'loading="lazy"'} src="screens/${encodeURIComponent(code)}.html" title="${esc(code)}"></iframe></div><div class="g-notes"></div>`;
+        <div class="g-frame"><iframe ${PRINT ? "" : 'loading="lazy"'} title="${esc(code)}"></iframe></div><div class="g-notes"></div>`;
       $(".g-strip", sec).appendChild(b);
       const ifr = $("iframe", b);
+      load(ifr, code);
       ifr.addEventListener("load", () => setTimeout(() => {
         if (!reports[code]) { const f = $(".g-frame", b); f.classList.add("missing"); f.textContent = "not built yet"; reports[code] = { missing: true }; done(); }
       }, 2500));
@@ -98,7 +102,7 @@
         e.source.postMessage({ uis: "hotspots", on: hotspots }, "*");
         done();
       }
-      if (e.source === ($("#focus-frame") || {}).contentWindow) renderSide(r);
+      if (e.source === ($("#focus-frame") || {}).contentWindow) { renderSide(r); e.source.postMessage({ uis: "hotspots", on: hotspots }, "*"); }
     }
     if (d.uis === "goto" && d.code) location.hash = d.code;
   });
@@ -107,6 +111,18 @@
     if (all.every((s) => reports[s.code])) html().setAttribute("data-measured-height", Math.ceil(document.body.scrollHeight));
   }
   const html = () => document.documentElement;
+
+  // Point a frame at a screen: its file, or in an export its inlined document.
+  function load(frame, code, query = "") {
+    if (!EMBED) { frame.src = `screens/${encodeURIComponent(code)}.html${query}`; return; }
+    frame.srcdoc = EMBED.screens[code] ? inlineAssets(EMBED.screens[code]) : "";
+  }
+  function inlineAssets(doc) {
+    const asset = (k) => (EMBED.assets[k] || "").replace(/<\/(script|style)/gi, "<\\/$1");
+    return doc
+      .replace(/<link data-uis-asset="([^"]+)">/g, (_, k) => `<style>${asset(k)}</style>`)
+      .replace(/<script data-uis-asset="([^"]+)"><\/script>/g, (_, k) => `<script>${asset(k)}<\/script>`);
+  }
 
   // ---------- focus view ----------
   const focus = document.createElement("div");
@@ -129,7 +145,7 @@
   }
   function openFocus() {
     const code = decodeURIComponent(location.hash.slice(1));
-    if (!byCode[code]) { focus.classList.remove("open"); $("#focus-frame").removeAttribute("src"); return; }
+    if (!byCode[code]) { focus.classList.remove("open"); $("#focus-frame").removeAttribute("src"); $("#focus-frame").removeAttribute("srcdoc"); return; }
     const dev = devices[byCode[code].group.device || "phone"] || devices.phone;
     const f = $("#focus-frame");
     const h = (reports[code] && reports[code].h) || dev.h;
@@ -137,7 +153,7 @@
     f.style.width = dev.w + "px"; f.style.height = h + "px";
     $(".stage", focus).style.cssText = `width:${dev.w * Math.max(scale, .3)}px;height:${h * Math.max(scale, .3)}px`;
     f.style.transform = `scale(${Math.max(scale, .3)})`; f.style.transformOrigin = "0 0";
-    f.src = `screens/${encodeURIComponent(code)}.html${hotspots ? "?hotspots" : ""}`;
+    load(f, code, hotspots ? "?hotspots" : "");
     focus.classList.add("open");
   }
   window.addEventListener("hashchange", openFocus);

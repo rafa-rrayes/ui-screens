@@ -13,6 +13,7 @@ the app build then has an exact target. UI Screens packages that workflow:
 - **Feedback loops agents can use without eyes:** static lint plus an in-browser self-check (overflow, clipped text,
   missing icons, unknown classes, bad links, hard-coded colors), screenshots and flow contact sheets.
 - **A hand-off.** `uis spec` writes a Markdown spec with a mermaid navigation graph for the agent that builds the app.
+- **One-file sharing.** `uis export` writes the whole gallery as a single HTML file. Send it to anyone, and they open it with no install, no server and no folder.
 
 ![A flow contact sheet made by `uis sheet`](examples/plantpal/shots/_sheet-B.png)
 
@@ -32,6 +33,7 @@ uis shot A1                # → shots/A1.png
 uis sheet A                # → shots/_sheet-A.png (the whole flow)
 uis serve                  # gallery at http://localhost:4400
 uis spec                   # → SPEC.md for the build
+uis export                 # → dist/my-app-screens.html, one file to share
 ```
 
 Requires Node ≥ 18 and Chrome, Chromium, Edge or Brave for `check`, `shot` and `sheet` (set `CHROME_PATH` if it isn't found).
@@ -118,10 +120,27 @@ Devices: `phone` 402×874, `tablet` 834×1194, `desktop` 1280×832. Add your own
 | `uis shot [CODE/GROUP…] [--scale 2]` | PNG per screen, auto-sized to the artboard |
 | `uis sheet [GROUP…]` | One PNG of a whole flow with notes, so you can review consistency |
 | `uis spec [--out file]` | Markdown hand-off: navigation graph, per-screen notes, links in and out |
+| `uis export [GROUP…] [--out file]` | The whole gallery (or some flows) as one self-contained HTML file: screens, styles, images, notes and click-through all inlined |
 | `uis icons` | Icon names in the sprite |
 | `uis serve [--port]` | Static server for the gallery |
 
 All checks print one issue per line (`CODE level type element — message`), support `--json`, and exit with code 1 on errors.
+
+## Sharing screens
+
+```bash
+uis export                 # every flow → dist/<name>-screens.html
+uis export B C             # only flows B and C
+uis export --out review.html
+```
+
+The file is the full gallery: zoom, notes, hotspots, the focus view (`#B4` links work), and click-through between
+screens. Everything is inlined (kit CSS and JS, group stylesheets, local images and fonts as data URIs), so it works
+as an e-mail attachment, in Slack or Drive, or double-clicked from Downloads. It also works when uploaded to any static
+host as-is. The kit is stored once, not once per screen, so even big projects stay small (the 7-screen example is about 120 KB).
+
+Other options: `uis shot` and `uis sheet` give PNGs for quick pastes, `uis spec` gives the Markdown hand-off, and
+the project folder itself can be deployed to any static host.
 
 ## Example
 

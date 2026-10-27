@@ -248,6 +248,7 @@ C.help = () => console.log(`uis — build UI screens before building the app. St
   uis shot [CODE|GROUP…] [--scale 2]     PNGs in shots/ (prints the self-check too)
   uis sheet [GROUP…] [--z .5]            contact sheet of a group/flow → shots/_sheet-<GROUP>.png
   uis spec [--out SPEC.md]               hand-off doc for the build: screens, notes, navigation graph (mermaid)
+  uis export [GROUP…] [--out file.html]  the whole gallery as ONE self-contained HTML file to share (dist/)
   uis icons                              list icon names
   uis serve [--port 4400]                serve the gallery at http://localhost:4400
 
@@ -490,6 +491,75 @@ C.spec = ({ flags }) => {
   const out = flags.out ? path.resolve(flags.out) : path.join(p.root, "SPEC.md");
   fs.writeFileSync(out, L.join("\n"));
   console.log(`${rel(out)}  (${p.screens.length} screens)`);
+};
+
+// ---------- export: one self-contained HTML file ----------
+const MIME = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".woff": "font/woff", ".ttf": "font/ttf", ".otf": "font/otf" };
+const isLocal = (ref) => !/^(https?:|data:|blob:|\/\/|\/|#|about:)/i.test(ref);
+function dataUri(file) {
+  const mime = MIME[path.extname(file).toLowerCase()];
+  return mime && fs.existsSync(file) ? `data:${mime};base64,${fs.readFileSync(file).toString("base64")}` : null;
+}
+// url(…) pointing at local files → data: URIs, resolved against `dir`.
+const inlineUrls = (text, dir) => text.replace(/url\((['"]?)([^'")]+)\1\)/g, (m, q, ref) => (isLocal(ref) && dataUri(path.resolve(dir, ref))) ? `url("${dataUri(path.resolve(dir, ref))}")` : m);
+function readCss(file, seen = new Set()) {
+  if (seen.has(file) || !fs.existsSync(file)) return "";
+  seen.add(file);
+  const dir = path.dirname(file);
+  const css = fs.readFileSync(file, "utf8").replace(/@import\s+(?:url\()?\s*['"]?([^'")\s]+)['"]?\s*\)?\s*;/g, (m, ref) => (isLocal(ref) ? readCss(path.resolve(dir, ref), seen) : m));
+  return inlineUrls(css, dir);
+}
+
+C.export = ({ _, flags }) => {
+  const p = project(flags);
+  const groups = _.length ? _.map((id) => p.M.groups.find((g) => g.id === id) || die(`unknown group ${id}`)) : p.M.groups;
+  const assets = {}, screens = {}, skipped = [];
+  const asset = (abs) => {
+    const key = path.relative(p.root, abs).split(path.sep).join("/");
+    if (!(key in assets)) assets[key] = abs.endsWith(".css") ? readCss(abs) : fs.readFileSync(abs, "utf8");
+    return key;
+  };
+  for (const g of groups) for (const [code] of g.screens) {
+    const s = p.byCode[code];
+    if (!fs.existsSync(s.file)) { skipped.push(code); continue; }
+    const dir = path.dirname(s.file);
+    const local = (ref) => isLocal(ref) && fs.existsSync(path.resolve(dir, ref)) ? path.resolve(dir, ref) : null;
+    let doc = fs.readFileSync(s.file, "utf8")
+      .replace(/<link\b[^>]*>/g, (tag) => { const href = (tag.match(/\bhref="([^"]+)"/) || [])[1]; return /stylesheet/.test(tag) && href && local(href) ? `<link data-uis-asset="${asset(local(href))}">` : tag; })
+      .replace(/<script\b[^>]*\bsrc="([^"]+)"[^>]*><\/script>/g, (tag, src) => (local(src) ? `<script data-uis-asset="${asset(local(src))}"></script>` : tag))
+      .replace(/(<(?:img|source)\b[^>]*\bsrc=")([^"]+)(")/g, (m, a, src, b) => (isLocal(src) && dataUri(path.resolve(dir, src)) ? a + dataUri(path.resolve(dir, src)) + b : m));
+    screens[code] = inlineUrls(doc, dir);
+  }
+  // Older vendored kits predate embed mode: fall back to this package's gallery.
+  const ownGallery = path.join(p.root, "kit", "gallery.js");
+  const galleryJs = fs.readFileSync(fs.existsSync(ownGallery) && /UIS_EMBED/.test(fs.readFileSync(ownGallery, "utf8")) ? ownGallery : path.join(KIT, "gallery.js"), "utf8");
+  const galleryCss = readCss(path.join(p.root, "kit", "components.css"));
+  const json = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
+  const raw = (t, tag) => t.replace(new RegExp(`</${tag}`, "gi"), `<\\/${tag}`);
+  const manifest = Object.assign({}, p.M, { groups });
+  const exported = new Date().toLocaleDateString("en-CA");
+  const html = `<!doctype html>
+<html lang="${esc(p.M.lang || "en")}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(p.M.name || "UI")} — screens</title>
+<style>${raw(galleryCss, "style")}</style>
+<script>window.UIS = ${json(manifest)};
+window.UIS_EMBED = ${json({ exported, assets, screens })};</script>
+</head>
+<body>
+<script>${raw(galleryJs, "script")}</script>
+</body>
+</html>
+`;
+  const slug = (p.M.name || "ui").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "ui";
+  const out = flags.out ? path.resolve(flags.out) : path.join(p.root, "dist", `${slug}-screens${_.length ? "-" + _.join("") : ""}.html`);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(out, html);
+  const n = Object.keys(screens).length;
+  console.log(`${rel(out)}  ${n} screen${n === 1 ? "" : "s"} · ${Math.round(Buffer.byteLength(html) / 1024)} KB · open it anywhere, no server needed`);
+  if (skipped.length) console.log(`not built (shown as placeholders): ${skipped.join(", ")}`);
 };
 
 C.icons = ({ flags }) => { const p = project(flags); console.log([...iconNames(p.root)].sort().join(" ")); };

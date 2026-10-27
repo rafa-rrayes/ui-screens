@@ -15,3 +15,4 @@ description: Design app screens as static HTML artboards (uis framework) before 
    Fix what looks wrong, not only what the checker reports.
 6. Per flow: `uis sheet <GROUP>` and look at the contact sheet for consistency across screens.
 7. Finish with `uis check` (all) and `uis spec`. Hand SPEC.md + the screens to the build.
+8. To share for review: `uis export [GROUP]` writes one self-contained HTML file in `dist/` (attach, upload or host it).
