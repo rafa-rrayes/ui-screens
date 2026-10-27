@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=402">
+<title>B1 · Today</title>
+<link rel="stylesheet" href="../kit/components.css">
+<script src="../kit/uis.js"></script>
+</head>
+<body>
+<main class="artboard phone" data-code="B1" data-title="Today">
+  <div class="status-bar"></div>
+  <header class="large-header">
+    <div class="col gap-2"><span class="t-caption c-muted">Tuesday, Oct 27</span><h1>Today</h1></div>
+    <div class="avatar soft">MO</div>
+  </header>
+  <section class="content" style="gap:20px">
+    <div class="card dark row gap-16">
+      <div class="col gap-4 grow">
+        <span class="t-overline" style="opacity:.6">Streak</span>
+        <span class="t-numeric-xl">41 days</span>
+        <span class="t-caption" style="opacity:.7">Water 3 plants today to keep it going</span>
+      </div>
+      <div class="icon-box lg accent round"><svg class="i"><use href="#i-zap"/></svg></div>
+    </div>
+    <section class="section">
+      <div class="section-head"><h2>Needs water</h2><span class="t-caption c-muted">3 of 6</span></div>
+      <div class="card list">
+        <div class="list-row" data-goto="B2">
+          <div class="ph round" style="--hue:140;width:44px;height:44px"></div>
+          <div class="text"><span class="t-body-strong">Monty</span><span class="t-caption c-muted">Monstera · Living room</span></div>
+          <span class="tag danger">1 day late</span>
+        </div>
+        <div class="divider"></div>
+        <div class="list-row" data-goto="B2">
+          <div class="ph round" style="--hue:95;width:44px;height:44px"></div>
+          <div class="text"><span class="t-body-strong">Fernando</span><span class="t-caption c-muted">Boston fern · Bathroom</span></div>
+          <span class="tag warning">Today</span>
+        </div>
+        <div class="divider"></div>
+        <div class="list-row" data-goto="B2">
+          <div class="ph round" style="--hue:70;width:44px;height:44px"></div>
+          <div class="text"><span class="t-body-strong">Sunny</span><span class="t-caption c-muted">Golden pothos · Kitchen</span></div>
+          <span class="tag warning">Today</span>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-head"><h2>Coming up</h2><a class="link t-caption">Calendar</a></div>
+      <div class="card list plain">
+        <div class="list-row"><div class="text"><span class="t-body-strong">Olive · Cleo</span><span class="t-caption c-muted">Friday, Oct 30</span></div><span class="tag">In 3 days</span></div>
+        <div class="divider"></div>
+        <div class="list-row"><div class="text"><span class="t-body-strong">Pip</span><span class="t-caption c-muted">Saturday, Oct 31</span></div><span class="tag">In 4 days</span></div>
+      </div>
+    </section>
+  </section>
+  <nav class="tab-bar">
+    <div class="tabs">
+      <a class="tab active" data-goto="B1"><span class="pill"><svg class="i"><use href="#i-droplet"/></svg><span class="badge">3</span></span>Today</a>
+      <a class="tab"><span class="pill"><svg class="i"><use href="#i-leaf"/></svg></span>Plants</a>
+      <a class="tab"><span class="pill"><svg class="i"><use href="#i-calendar"/></svg></span>Calendar</a>
+      <a class="tab"><span class="pill"><svg class="i"><use href="#i-user"/></svg></span>Profile</a>
+    </div>
+    <div class="home-indicator"></div>
+  </nav>
+</main>
+<aside data-notes hidden>
+  <p>1. Home tab. "Needs water" = due today or overdue, most overdue first. Row → B2.</p>
+  <p>2. Overdue tags are red from 1 day late; due today is amber.</p>
+  <p>3. Streak card counts consecutive days with every due plant handled (BRIEF §5).</p>
+  <p>4. Tab badge = plants needing water today. No plants → B4.</p>
+</aside>
+</body>
+</html>

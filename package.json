@@ -1,0 +1,38 @@
+{
+  "name": "ui-screens",
+  "version": "0.1.0",
+  "description": "Design app screens as static HTML before you build the app. A tiny framework optimized for AI coding agents: one file per artboard, shared tokens and components, lint + in-browser self-checks, screenshots, and a build spec export.",
+  "bin": {
+    "uis": "bin/uis.js"
+  },
+  "files": [
+    "bin",
+    "kit",
+    "templates",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ui",
+    "mockups",
+    "prototyping",
+    "design-system",
+    "ai-agents",
+    "claude-code",
+    "html",
+    "wireframes"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node bin/uis.js check --dir examples/plantpal"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafa-rrayes/ui-screens.git"
+  },
+  "homepage": "https://github.com/rafa-rrayes/ui-screens#readme"
+}

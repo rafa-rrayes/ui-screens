@@ -1,0 +1,65 @@
+/* Design tokens. Rebrand a project by editing ONLY this file.
+   Screens and components must use var(--…) — `uis check` flags hard-coded colors in screens. */
+:root {
+  /* color — text */
+  --ink: #15171C;          /* primary text, primary button, selected chip */
+  --ink-muted: #5E6470;    /* secondary text */
+  --ink-subtle: #9AA0AA;   /* placeholders, chevrons, overlines */
+  /* color — surfaces */
+  --bg: #F5F5F2;           /* page background */
+  --surface: #FFFFFF;      /* cards, sheets, bars */
+  --sunken: #EDEDE8;       /* icon boxes, inputs on surface, empty tracks */
+  --line: #E3E3DD;         /* borders, dividers */
+  /* color — brand / accent */
+  --accent: #3B5BFD;
+  --accent-strong: #2440D6;
+  --accent-soft: #E6EBFF;
+  --on-accent: #FFFFFF;
+  /* color — status */
+  --success: #18A35A; --success-soft: #DDF5E7;
+  --warning: #B6720A; --warning-soft: #FCF0D7;
+  --danger:  #D63A3F; --danger-soft:  #FBE4E3;
+  /* color — dark surfaces */
+  --ink-deep: #0E1014;     /* dark cards, celebration screens */
+  --on-ink: #F5F5F2;       /* text on ink / ink-deep */
+  --scrim: rgba(14, 16, 20, .45);
+
+  /* space (4px grid) */
+  --s-2: 2px; --s-4: 4px; --s-8: 8px; --s-12: 12px; --s-16: 16px;
+  --s-20: 20px; --s-24: 24px; --s-32: 32px; --s-40: 40px; --s-48: 48px;
+
+  /* radius */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-full: 999px;
+
+  /* type — system stacks keep renders deterministic and offline */
+  --font-display: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* effects */
+  --shadow-card: 0 1px 2px rgba(14, 16, 20, .05);
+  --shadow-float: 0 10px 30px rgba(14, 16, 20, .18);
+
+  /* artboards */
+  --phone-w: 402px;  --phone-h: 874px;
+  --tablet-w: 834px; --tablet-h: 1194px;
+  --desktop-w: 1280px; --desktop-h: 832px;
+}
+
+/* text styles */
+.t-display     { font: 700 30px/34px var(--font-display); letter-spacing: -0.02em; }
+.t-numeric-xl  { font: 700 36px/40px var(--font-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.t-title       { font: 650 22px/28px var(--font-display); letter-spacing: -0.01em; }
+.t-headline    { font: 600 17px/22px var(--font-ui); }
+.t-body        { font: 400 15px/21px var(--font-ui); }
+.t-body-strong { font: 600 15px/21px var(--font-ui); }
+.t-caption     { font: 400 13px/18px var(--font-ui); }
+.t-caption-strong { font: 600 13px/18px var(--font-ui); }
+.t-overline    { font: 600 11px/14px var(--font-ui); letter-spacing: .06em; text-transform: uppercase; }
+.t-mono        { font: 500 13px/18px var(--font-mono); }
+
+/* text colors */
+.c-ink { color: var(--ink); } .c-muted { color: var(--ink-muted); } .c-subtle { color: var(--ink-subtle); }
+.c-accent { color: var(--accent); } .c-accent-strong { color: var(--accent-strong); }
+.c-success { color: var(--success); } .c-warning { color: var(--warning); } .c-danger { color: var(--danger); }
+.c-on-ink { color: var(--on-ink); }

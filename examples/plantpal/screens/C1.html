@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>C1 · Overview</title>
+<link rel="stylesheet" href="../kit/components.css">
+<script src="../kit/uis.js"></script>
+</head>
+<body>
+<main class="artboard desktop" data-code="C1" data-title="Overview">
+  <aside class="sidebar">
+    <div class="brand"><span class="icon-box sm accent"><svg class="i"><use href="#i-leaf"/></svg></span>PlantPal Admin</div>
+    <a class="nav on"><svg class="i"><use href="#i-dashboard"/></svg>Overview</a>
+    <a class="nav"><svg class="i"><use href="#i-users"/></svg>Users<span class="count">18,420</span></a>
+    <a class="nav"><svg class="i"><use href="#i-leaf"/></svg>Species</a>
+    <span class="nav-label">Support</span>
+    <a class="nav"><svg class="i"><use href="#i-inbox"/></svg>Tickets<span class="count">14</span></a>
+    <a class="nav"><svg class="i"><use href="#i-bell"/></svg>Reminders</a>
+    <div class="spacer"></div>
+    <a class="nav"><svg class="i"><use href="#i-settings"/></svg>Settings</a>
+  </aside>
+  <div class="main">
+    <header class="page-head">
+      <div class="col gap-4"><h1>Overview</h1><span class="t-caption c-muted">Last 30 days · updated 9:41</span></div>
+      <div class="toolbar"><div class="seg auto"><span>7 d</span><span class="on">30 d</span><span>90 d</span></div><button class="btn secondary sm"><svg class="i"><use href="#i-download"/></svg>Export</button></div>
+    </header>
+    <section class="page">
+      <div class="grid-4">
+        <div class="card pad stat"><span class="t-caption c-muted">Active users</span><span class="value">18,420</span><span class="delta">+6.2%</span></div>
+        <div class="card pad stat"><span class="t-caption c-muted">Plants tracked</span><span class="value">64,310</span><span class="delta">+4.1%</span></div>
+        <div class="card pad stat"><span class="t-caption c-muted">Reminders handled</span><span class="value">92%</span><span class="delta">+1.3 pts</span></div>
+        <div class="card pad stat"><span class="t-caption c-muted">Open tickets</span><span class="value">14</span><span class="delta down">+5 this week</span></div>
+      </div>
+      <div class="row gap-16 start">
+        <div class="card pad col gap-16 grow">
+          <div class="row between"><span class="t-headline">Daily waterings logged</span><span class="t-caption c-muted">Oct 2026</span></div>
+          <div class="bars"><span style="--h:40%"></span><span style="--h:52%"></span><span style="--h:48%"></span><span style="--h:60%"></span><span style="--h:58%"></span><span style="--h:71%"></span><span style="--h:66%"></span><span style="--h:62%"></span><span style="--h:75%"></span><span style="--h:70%"></span><span style="--h:82%"></span><span style="--h:78%"></span><span style="--h:86%"></span><span class="on" style="--h:92%"></span></div>
+        </div>
+        <div class="card list plain" style="width:340px">
+          <div class="list-row"><span class="t-headline">Top species</span></div>
+          <div class="list-row"><div class="text"><span class="t-body-strong">Golden pothos</span><div class="progress" style="--p:82%"><span></span></div></div><span class="t-caption c-muted tnum">8,214</span></div>
+          <div class="list-row"><div class="text"><span class="t-body-strong">Monstera</span><div class="progress" style="--p:64%"><span></span></div></div><span class="t-caption c-muted tnum">6,402</span></div>
+          <div class="list-row"><div class="text"><span class="t-body-strong">Snake plant</span><div class="progress" style="--p:51%"><span></span></div></div><span class="t-caption c-muted tnum">5,118</span></div>
+        </div>
+      </div>
+      <div class="card table-card">
+        <table class="table">
+          <thead><tr><th>User</th><th>Plants</th><th>Streak</th><th>Status</th><th class="num">Last active</th></tr></thead>
+          <tbody>
+            <tr><td><div class="row gap-12"><div class="avatar sm soft">MO</div>Maya Okafor</div></td><td>6</td><td>41 days</td><td><span class="tag success dot">Active</span></td><td class="num">9:38</td></tr>
+            <tr><td><div class="row gap-12"><div class="avatar sm soft">JT</div>Jonas Thiel</div></td><td>14</td><td>3 days</td><td><span class="tag success dot">Active</span></td><td class="num">Oct 26</td></tr>
+            <tr><td><div class="row gap-12"><div class="avatar sm soft">AR</div>Ana Rocha</div></td><td>2</td><td>—</td><td><span class="tag warning dot">Reminders off</span></td><td class="num">Oct 11</td></tr>
+          </tbody>
+        </table>
+        <div class="pager"><span>1–3 of 18,420</span><div class="row gap-8"><button class="btn secondary xs">Previous</button><button class="btn secondary xs">Next</button></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+<aside data-notes hidden>
+  <p>1. Range toggle (7/30/90 d) drives every number on the page. Export = CSV of the table + KPIs.</p>
+  <p>2. "Reminders handled" = due reminders followed by a log within 24 h.</p>
+  <p>3. Table rows open the user detail (not designed yet).</p>
+</aside>
+</body>
+</html>

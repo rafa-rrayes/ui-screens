@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=402">
+<title>B3 · Log watering (sheet)</title>
+<link rel="stylesheet" href="../kit/components.css">
+<script src="../kit/uis.js"></script>
+</head>
+<body>
+<main class="artboard phone" data-code="B3" data-title="Log watering (sheet)">
+  <div class="ph" style="--hue:140;height:300px;border-radius:0;position:absolute;top:0;left:0;right:0"></div>
+  <div class="status-bar light" style="position:relative"></div>
+  <div class="scrim"></div>
+  <div class="sheet">
+    <div class="sheet-head">
+      <div class="col gap-4"><h2>Water Monty</h2><span class="t-body c-muted">Monstera · last time 600 ml</span></div>
+      <button class="sheet-close" aria-label="Close" data-goto="B2"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="field"><span class="label">How much?</span>
+      <div class="seg"><span>Small · 150 ml</span><span>Medium · 300</span><span class="on">Large · 600</span></div>
+    </div>
+    <div class="card list plain">
+      <div class="list-row"><div class="text"><span class="t-body-strong">Also fed it</span><span class="t-caption c-muted">Last feed Oct 12</span></div><span class="switch"></span></div>
+      <div class="divider"></div>
+      <div class="list-row"><div class="text"><span class="t-body-strong">Rotated the pot</span></div><span class="switch on"></span></div>
+    </div>
+    <div class="field"><span class="label">When</span><div class="input"><svg class="i"><use href="#i-calendar"/></svg>Today, 9:41</div></div>
+    <button class="btn accent block" data-goto="B1"><svg class="i"><use href="#i-check"/></svg>Save</button>
+    <div class="home-indicator"></div>
+  </div>
+</main>
+<aside data-notes hidden>
+  <p>1. Opened from B2. Defaults to the last amount used for this plant.</p>
+  <p>2. <b>Save</b> logs the event, recomputes the next due date, returns to B1 with toast "Monty watered · next on Nov 3".</p>
+  <p>3. "When" allows back-dating up to 7 days (logged late).</p>
+</aside>
+</body>
+</html>
