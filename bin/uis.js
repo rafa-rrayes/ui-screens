@@ -107,6 +107,7 @@ function selectScreens(p, codes) {
   }
   return out;
 }
+const unesc = (s) => s.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&");
 function htmlToText(h) {
   return h.replace(/<li[^>]*>/g, "- ").replace(/<\/(p|li|div|h\d)>/g, "\n").replace(/<br\s*\/?>/g, "\n")
     .replace(/<code>(.*?)<\/code>/g, "`$1`").replace(/<(b|strong)>(.*?)<\/\1>/g, "**$2**").replace(/<[^>]+>/g, "")
@@ -138,7 +139,8 @@ function lintFile(p, s, ctx) {
   if (!art) add("error", "no-artboard", 'missing <main class="artboard phone|tablet|desktop" data-code=… data-title=…>');
   else {
     const code = (art[0].match(/data-code="([^"]*)"/) || [])[1];
-    const title = (art[0].match(/data-title="([^"]*)"/) || [])[1];
+    const rawTitle = (art[0].match(/data-title="([^"]*)"/) || [])[1];
+    const title = rawTitle === undefined ? undefined : unesc(rawTitle);
     if (code !== s.code) add("error", "code-mismatch", `data-code="${code}" but the file is ${s.code}.html`);
     if (title !== undefined && title !== s.title) add("warn", "title-mismatch", `data-title="${title}" but the manifest says "${s.title}"`);
     const dev = s.device;

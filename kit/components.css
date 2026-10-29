@@ -48,10 +48,10 @@ img { display: block; max-width: 100%; }
 /* ---------- status bar / home indicator (uis.js draws the glyphs) ---------- */
 .status-bar { height: 54px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 14px 32px 0 44px; color: var(--ink); }
 .status-bar .time { font: 600 17px/22px var(--font-ui); }
-.status-bar.light, .dark .status-bar { color: var(--on-ink); }
+.status-bar.light, .dark .status-bar, .lockscreen .status-bar { color: var(--on-ink); }
 .home-indicator { height: 34px; flex: none; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; }
 .home-indicator::after { content: ""; width: 140px; height: 5px; border-radius: 99px; background: var(--ink); }
-.home-indicator.light::after, .dark .home-indicator::after { background: var(--on-ink); }
+.home-indicator.light::after, .dark .home-indicator::after, .lockscreen .home-indicator::after { background: var(--on-ink); }
 
 /* ---------- browser bar (mobile web) ---------- */
 .browser-bar { flex: none; padding: 4px 12px 8px; }
@@ -165,9 +165,9 @@ img { display: block; max-width: 100%; }
 /* ---------- icon box / avatar / thumb ---------- */
 .icon-box { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: var(--r-md); background: var(--sunken); color: var(--ink); }
 .icon-box .i { --i: 18px; }
-.icon-box.round { border-radius: 50%; }
 .icon-box.sm { width: 32px; height: 32px; border-radius: var(--r-sm); } .icon-box.sm .i { --i: 16px; }
 .icon-box.lg { width: 56px; height: 56px; border-radius: var(--r-lg); } .icon-box.lg .i { --i: 26px; }
+.icon-box.round { border-radius: 50%; }  /* after .sm/.lg so it wins */
 .icon-box.accent  { background: var(--accent-soft);  color: var(--accent-strong); }
 .icon-box.success { background: var(--success-soft); color: var(--success); }
 .icon-box.warning { background: var(--warning-soft); color: var(--warning); }
